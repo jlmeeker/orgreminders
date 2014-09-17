@@ -1,0 +1,68 @@
+{{template "htmlstart"}}
+	<title>Save - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<form>
+		<div class="title">Item Saved:</div>
+		{{if .SavedEvent}}
+			{{$key := .Event2EditKey}}
+			{{with .Event2Edit}}
+			<div class="event">
+				<label>Title: </label><a href="/editevent?id={{$key}}">{{.Title}}</a>
+				<br>
+				<label>Due: </label>{{.DueFormatted}}
+				<br>
+				<label>Organization(s): </label>{{range .Orgs}}{{.}},{{end}}
+				<br>
+				<label>Email enabled: </label>{{.Email}}
+				<br>
+				<label>Text Enabled: </label>{{.Text}}
+				<br>
+				<label>Email Message: </label><br><div class="msgbody">{{.EmailMessage}}</div>
+				<br>
+				<label>Text Message: </label><br><div class="msgbody"><pre>{{.TextMessage}}</pre></div>
+				<br>
+			</div>
+			{{end}}
+		{{else if .SavedOrg}}
+			{{$key := .Org2EditKey}}
+			{{with .Org2Edit}}
+			<div class="org">
+				<label>Name: </label><a href="/editorg?id={{$key}}">{{.Name}}</a>
+				<br>
+				<label>Description: </label>{{.Description}}
+				<br>
+				<label>Timezone: </label>{{.TimeZone}}
+				<br>
+			</div>
+			{{end}}
+		{{else if .SavedMember}}
+			{{$key := .Member2EditKey}}
+			{{with .Member2Edit}}
+			<div class="org">
+				<label>Name: </label><a href="/editmember?id={{$key}}">{{.Name}}</a>
+				<br>
+				<label>Cell: </label>{{.Cell}}
+				<br>
+				<label>Email: </label>{{.Email}}
+				<br>
+				<label>Receive Email: </label>{{.EmailOn}}
+				<br>
+				<label>Receive Texts: </label>{{.TextOn}}
+				<br>
+				<label>Organization(s): </label>{{range .Orgs}}{{.}},{{end}}
+				<br>
+			</div>
+			{{end}}
+		{{else}}
+			Nothing
+		{{end}}
+		<br>
+	</form>
+</div>
+{{template "footer" .}}
+</body>
+</html>

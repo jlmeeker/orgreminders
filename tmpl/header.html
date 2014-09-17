@@ -1,0 +1,19 @@
+{{define "htmlstart"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script>
+		function shrinklarge(divObj) {
+			console.log(divObj);
+			if (divObj.style.height == '2.6em' || divObj.style.height == '') {
+				divObj.style.transition = "height 0.3s linear 0s";
+				divObj.style.height = divObj.scrollHeight+"px";
+			} else {
+				divObj.style.transition = "height 0.15s linear 0s";
+				divObj.style.height = '';
+			}
+		}
+	</script>
+{{end}}

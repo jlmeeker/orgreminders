@@ -1,0 +1,25 @@
+{{template "htmlstart"}}
+	<title>Members - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	{{range $key, $member := .Members}}
+		<div class="org mini" onclick="shrinklarge(this)">
+			<label>Name: </label><a href="/editmember?id={{$member.Key}}">{{$member.Name}}</a>
+			<br>
+			<label>Email: </label>{{$member.Email}}
+			<br>
+			<label>Cell: </label>{{$member.Cell}}
+			<br>
+			<label>TextAddr: </label>{{$member.TextAddr}}
+			<br>
+			<label>Organizations: </label>{{range $member.Orgs}}{{.}}, {{end}}
+			<br>
+		</div>
+	{{end}}
+</div>
+{{template "footer" .}}
+</body>
+</html>

@@ -1,0 +1,29 @@
+{{template "htmlstart"}}
+	<title>Active - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	{{range $key, $event := .Events}}
+		<div class="event mini" onclick="shrinklarge(this)">
+			<label>Event Title: </label><a href="/editevent?id={{$key}}">{{$event.Title}}</a>
+			<br>
+			<label>When Due: </label>{{$event.DueFormatted}}
+			<br>
+			<label>Organization(s): </label>{{range $event.Orgs}}{{.}},{{end}}
+			<br>
+			<label>Email enabled: </label>{{$event.Email}}
+			<br>
+			<label>Text Enabled: </label>{{$event.Text}}
+			<br>
+			<label>Email Message: </label><br><div class="msgbody">{{$event.EmailMessage}}</div>
+			<br>
+			<label>Text Message: </label><br><div class="msgbody"><pre>{{$event.TextMessage}}</pre></div>
+			<br>
+		</div>
+	{{end}}
+</div>
+{{template "footer" .}}
+</body>
+</html>

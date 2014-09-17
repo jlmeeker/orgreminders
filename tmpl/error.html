@@ -1,0 +1,15 @@
+{{template "htmlstart"}}
+	<title>Error - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+<form>
+	<div class="title">AN ERROR OCCURRED!!!:</div>
+	{{.Error}}
+</form>
+</div>
+{{template "footer" .}}
+</body>
+</html>

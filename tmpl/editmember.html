@@ -1,0 +1,61 @@
+{{template "htmlstart"}}
+	<title>Edit Member - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<form action="/savemember" method="POST">
+	<div class="title">Edit Member</div>
+	<input type="hidden" id="key" name="key" value="{{.Member2EditKey}}">
+		{{$porgs := .Orgs}}
+		{{$superuser := .SuperUser}}
+		{{with .Member2Edit}}
+			<label for="name">Name</label>{{.Name}}
+			<input type="hidden" id="name" name="name" value="{{.Name}}">
+			<br>
+			<label for="email">Email</label>
+			<input type="text" id="email" name="email" value="{{.Email}}">
+			<br>
+			<label for="cell">Cell #</label>
+			<input type="text" name="cell" id="cell" value="{{.Cell}}">
+			<br>
+			<label for="carrier">Carrier</label>
+			<select name="carrier" id="carrier">
+				<option value="unk">Unknown</option>
+				<option value="att" {{if eq .Carrier "att"}}selected{{end}}>AT&T</option>
+				<option value="sprint" {{if eq .Carrier "sprint"}}selected{{end}}>Sprint</option>
+				<option value="verizon" {{if eq .Carrier "verizon"}}selected{{end}}>Verizon</option>
+				<option value="tmobile" {{if eq .Carrier "tmobile"}}selected{{end}}>T-Mobile</option>
+			</select>
+			<br>
+			<label for="emailon" class="cblabel">Receive Email</label>
+			<input type="checkbox" name="emailon" id="emailon" {{if .EmailOn}} checked {{end}}>
+			<br>
+			<label for="texton" class="cblabel">Receive Texts</label>
+			<input type="checkbox" name="texton" id="texton" {{if .TextOn}} checked {{end}}>
+			<br>
+			<label for="orgs">Organization(s)</label>
+				<select multiple name="orgs" id="orgs">
+				{{range .Orgs}}
+					<option value="{{.}}" selected>{{.}}</option>
+				{{end}}
+				{{range $porgs}}
+					<option value="{{.}}">{{.}}</option>
+				{{end}}
+				</select>
+			<br>
+			{{if $superuser}}
+				<label for="webuser" class="cblabel">Web User</label>
+				<input type="checkbox" name="webuser" id="webuser" {{if .WebUser}} checked {{end}}>
+				<br>
+			{{else}}
+				<input type="hidden" name="webuser" id="webuser" {{if .WebUser}} value="on" {{end}}>
+			{{end}}
+			<input type="submit" value="Save">
+		{{end}}
+	</form>
+</div>
+{{template "footer" .}}
+</body>
+</html>

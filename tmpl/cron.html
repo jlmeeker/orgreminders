@@ -1,0 +1,29 @@
+{{template "htmlstart"}}
+	<title>Cron - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<form>
+	<div class="title">Reminders were sent for the following events:</div>
+	{{range .Events}}
+		<div class="event">
+			<label>Title: </label>{{.Title}}
+			<br>
+			<label>Due: </label>{{.DueFormatted}}
+			<br>
+			<label>Organization(s): </label>{{range .Orgs}}{{.}},{{end}}
+			<br>
+			<label>Email enabled: </label>{{.Email}}
+			<br>
+			<label>Text Enabled: </label>{{.Text}}
+			<br>
+		</div>
+		<br>
+	{{end}}
+	</form>
+</div>
+{{template "footer" .}}
+</body>
+</html>

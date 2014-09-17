@@ -1,0 +1,16 @@
+{{template "htmlstart"}}
+	<title>Home - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<div id="welcomemsg">
+		Welcome to OrgReminders!
+		<br><br>
+		{{if .LoggedIn}}Use the links above to navigate the site.{{else}}Please log in above.{{end}}
+	</div>
+</div>
+{{template "footer" .}}
+</body>
+</html>

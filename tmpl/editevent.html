@@ -1,0 +1,84 @@
+{{template "htmlstart"}}
+	<title>Edit Event - OrgReminder</title>
+	<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+	<script>
+			tinymce.init({
+	        	inline:true,
+	        	selector:'div.html',
+			});
+	</script>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<form action="/saveevent" method="POST" style="border: 1px black;">
+	<div class="title">Edit Event</div>
+		<input type="hidden" id="key" name="key" value="{{.Event2EditKey}}">
+		{{$porgs := .Orgs}}
+		{{with .Event2Edit}}
+				<label for="title">Title</label>
+				<input type="text" id="title" name="title" value="{{.Title}}">
+			<br>
+				<label for="emailmessage">Email Message</label>
+				<div id="emailmessage" name="emailmessage" class="html">{{.EmailMessage}}</div>
+			<br>
+				<label for="textmessage">Text Message</label>
+				<textarea id="textmessage" name="textmessage" cols="75" rows="10">{{.TextMessage}}</textarea>
+			<br>
+				<label for="due">When</label>
+				<input type="text" name="due" id="due" value="{{.DueFormatted}}">
+			<br>
+			<br>
+				<label for="sendemail">Send Email</label>
+				<input type="checkbox" name="sendemail" id="sendmail" {{if .Email}} checked {{end}}>
+			<br>
+				<label for="sendtext">Send Text</label>
+				<input type="checkbox" name="sendtext" id="sendtext" {{if .Text}} checked {{end}}>
+			<br>
+			<br>
+				<label for="oncreate" class="cblabel">Now</label>
+				<input type="checkbox" name="oncreate" id="oncreate">
+			<br>
+				<label for="ondue">Day Due</label>
+				<input type="checkbox" name="ondue" id="ondue" {{if .OnDue}} checked {{end}}>
+			<br>
+				<label for="oneday">1 Day Before</label>
+				<input type="checkbox" name="oneday" id="oneday" {{if .OneDay}} checked {{end}}>
+			<br>
+				<label for="twodays">2 Days Before</label>
+				<input type="checkbox" name="twodays" id="twodays" {{if .TwoDay}} checked {{end}}>
+			<br>
+				<label for="threedays">3 Days Before</label>
+				<input type="checkbox" name="threedays" id="threedays" {{if .ThreeDay}} checked {{end}}>
+			<br>
+				<label for="fourdays">4 Days Before</label>
+				<input type="checkbox" name="fourdays" id="fourdays" {{if .FourDay}} checked {{end}}>
+			<br>
+				<label for="fivedays">5 Days Before</label>
+				<input type="checkbox" name="fivedays" id="fivedays" {{if .FiveDay}} checked {{end}}>
+			<br>
+				<label for="sixdays">6 Days Before</label>
+				<input type="checkbox" name="sixdays" id="sixdays" {{if .SixDay}} checked {{end}}>
+			<br>
+				<label for="sevendays">7 Days Before</label>
+				<input type="checkbox" name="sevendays" id="sevendays" {{if .SevenDay}} checked {{end}}>
+			<br>
+			<br>
+				<label for="orgs">Organization(s)</label>
+				<select multiple name="orgs" id="orgs">
+				{{range .Orgs}}
+					<option value="{{.}}" selected>{{.}}</option>
+				{{end}}
+				{{range $porgs}}
+					<option value="{{.}}">{{.}}</option>
+				{{end}}
+				</select>
+			<br>
+				<input type="submit">
+	</form>
+	{{end}}
+</div>
+{{template "footer" .}}
+</body>
+</html>

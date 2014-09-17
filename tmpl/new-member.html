@@ -1,0 +1,51 @@
+{{template "htmlstart"}}
+	<title>New Member - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<form action="/savemember" method="POST" style="border: 1px black;">
+		<div class="title">New Member</div>
+		<label for="name">Name</label>
+		<input type="text" id="name" name="name">
+		<br>
+		<label for="email" class="cblabel">Email</label>
+		<input type="text" name="email" id="email">
+		<br>
+		<label for="cell" class="cblabel">Cell #</label>
+		<input type="text" name="cell" id="cell">
+		<br>
+		<label for="carrier">Carrier</label>
+		<select name="carrier" id="carrier">
+			<option value="unk" selected>Unknown</option>
+			<option value="att">AT&T</option>
+			<option value="sprint">Sprint</option>
+			<option value="verizon">Verizon</option>
+			<option value="tmobile">T-Mobile</option>
+		</select>
+		<br>
+		<label for="emailon" class="cblabel">Receive Email</label>
+		<input type="checkbox" name="emailon" id="emailon">
+		<br>
+		<label for="texton" class="cblabel">Receive Texts</label>
+		<input type="checkbox" name="texton" id="texton">
+		<br>
+		<label for="orgs">Organization(s)</label>
+		<select multiple name="orgs" id="orgs">
+		{{range .Orgs}}
+			<option value="{{.}}">{{.}}</option>
+		{{end}}
+		</select>
+		<br>
+		{{if .SuperUser}}
+			<label for="webuser" class="cblabel">Web User</label>
+			<input type="checkbox" name="webuser" id="webuser">
+			<br>
+		{{end}}
+		<input type="submit" value="Save">
+	</form>
+</div>
+{{template "footer" .}}
+</body>
+</html>

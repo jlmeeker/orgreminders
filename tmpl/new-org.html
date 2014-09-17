@@ -1,0 +1,40 @@
+{{template "htmlstart"}}
+	<title>New - OrgReminder</title>
+	<script src="https://tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+	<script>
+	        tinymce.init({inline:true,selector:'div.html'});
+	        var tz = jstz.determine();
+	</script>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+{{if .AllowNewOrg}}
+	<form action="/saveorg" method="POST">
+	<div class="title">New Organization</div>
+		<label for="name">Name</label>
+		<input type="text" id="name" name="name" value="">
+		<br>
+		<label for="description">Description</label>
+		<input type="text" id="description" name="description" value="">
+		<br>
+		<label for="timezone">Timezone</label>
+		<input type="text" name="timezone" id="timezone" value="">
+		<br>
+		<label for="admin">Administrator(s)<br>(one per line)</label>
+		<textarea id="admin" name="admin" cols="30" rows="10" wrap="hard">{{.UserEmail}}</textarea>
+		<br>
+		<input type="submit" value="Save">
+	</form>
+	<script>
+		document.getElementById("timezone").value = tz.name();
+	</script>
+{{else}}
+<strong>Access denied</strong>
+{{end}}
+</div>
+{{template "footer" .}}
+</body>
+</html>

@@ -1,0 +1,31 @@
+{{template "htmlstart"}}
+	<title>Edit Organization - OrgReminder</title>
+	{{template "css"}}
+</head>
+<body>
+{{template "nav2" .}}
+<div class="bodycontainer">
+	<form action="/saveorg" method="POST">
+	<div class="title">Edit Organization</div>
+	<input type="hidden" id="key" name="key" value="{{.Org2EditKey}}">
+		{{with .Org2Edit}}
+			<label for="name">Name</label>{{.Name}}
+			<input type="hidden" id="name" name="name" value="{{.Name}}">
+			<br>
+			<label for="description">Description</label>
+			<input type="text" id="description" name="description" value="{{.Description}}">
+			<br>
+			<label for="timezone">Timezone</label>
+			<input type="text" name="timezone" id="timezone" value="{{.TimeZone}}">
+			<br>
+			<label for="admin">Administrator(s))<br>(one per line)</label>
+			<textarea id="admin" name="admin" cols="30" rows="10" wrap="hard">{{range .Administrator}}{{.}}
+{{end}}</textarea>
+			<br>
+			<input type="submit" value="Save">
+		{{end}}
+	</form>
+</div>
+{{template "footer" .}}
+</body>
+</html>

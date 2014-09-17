@@ -1,0 +1,260 @@
+{{define "css"}}
+	<link href='http://fonts.googleapis.com/css?family=Comfortaa:400,700,300' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+		@charset "UTF-8";
+		@font-face {
+		  font-family: 'Comfortaa';
+		  font-style: normal;
+		  font-weight: 300;
+		  src: local('Comfortaa Light'), local('Comfortaa-Light'), url(https://fonts.gstatic.com/s/comfortaa/v7/r_tUZNl0G8xCoOmp_JkSCnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+		}
+		@font-face {
+		  font-family: 'Comfortaa';
+		  font-style: normal;
+		  font-weight: 400;
+		  src: local('Comfortaa'), local('Comfortaa-Regular'), url(https://fonts.gstatic.com/s/comfortaa/v7/qLBu5CQmSMt1H43OiWJ77T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+		}
+		@font-face {
+		  font-family: 'Comfortaa';
+		  font-style: normal;
+		  font-weight: 700;
+		  src: local('Comfortaa Bold'), local('Comfortaa-Bold'), url(https://fonts.gstatic.com/s/comfortaa/v7/fND5XPYKrF2tQDwwfWZJI3hCUOGz7vYGh680lGh-uXM.woff) format('woff');
+		}
+		* {
+			font-family: Comfortaa;
+			/*font-family: Arial, Helvetica, sans-serif;*/
+			color: #E8E8E8;
+		}
+		html{
+			height:100%;
+			min-height:100%;
+		}
+		body {
+			background: url('/wetleaves.jpg') no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			font-size: .85em;
+			margin: 0px 0px 0px 0px;
+			height:100%;
+			min-height:100%;
+		}
+		.navcontainer {
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			background: rgba(0,0,0, 0.5) !important;
+			min-height: 5em;
+			border-bottom: 1px solid black;
+			width: 100%;
+			z-index: 1000;
+		}
+		.bodycontainer {
+			position: fixed;
+			top: 6em;
+			bottom: 2em;
+			left: 0px;
+			overflow: auto;
+			width: 100%;
+		}
+		.footercontainer {
+			position: fixed;
+			bottom: 0px;
+			left: 0px;
+			background: #000 !important;
+			text-align: right;
+			width: 100%;
+			color: gray;
+			font-size: 0.8em;
+		}
+		form {
+			background-color: rgba(32,32,32, .6);
+			width: 80%;
+			margin-left: 10%;
+		}
+		label {
+			float: left;
+			min-width: 8em;
+			text-align: right;
+			font-weight: bold;
+			vertical-align: top;
+			display: block;
+			margin-right: 1em;
+			color: #FFCC66;
+		}
+		input, textarea, .html, select {
+			font-size: .85em;
+			margin-top: 3px;
+			border-radius: 5px;
+			background-color: rgba(100,100,100,.3);
+			outline: none;
+			border: 1px solid #888;
+		}
+		textarea {
+			outline: none;
+		}
+		input[type=text] {
+			width: 30em;
+		}
+		select {
+			min-width: 10em;
+		}
+		.html {
+			border: 1px solid #888;
+			display: inline-block;
+			width: 50em;
+			height: 20em;
+		}
+		.event, .org {
+			margin-left: 10%;
+			margin-bottom: 1em;
+			padding-top: 0px;
+			background-color: rgba(32,32,32, .6);
+			width: 80%;
+			border: 1px solid black;
+		}
+		.mini {
+			height: 2.6em;
+			overflow: hidden;
+			margin-bottom: 0.5em;
+			cursor: pointer;
+		}
+		.msgbody {
+			background-color: rgba(100,100,100,.3);
+			margin-left: 10px;
+			width: 90%;
+		}
+		input[type=submit] {
+			background: #99CC66;
+			color: black;
+			width: 10em;
+			height: 2em;
+		}
+		input[type=submit]:hover {
+			background: #996600;
+			color: white;
+			width: 10em;
+			height: 2em;
+			cursor: pointer;
+		}
+		#appname {
+			float: left;
+			margin-bottom: 0px;
+			margin-left: 20px;
+			color: #996600;
+			font-weight: bold;
+			font-size: 3em;
+			line-height: .5em;
+			cursor: pointer;
+		}
+		#nav {
+			float: right;
+			text-align: right;
+			vertical-align: text-bottom;
+			margin-top: 3em;
+		}
+		a {
+			text-decoration: none;
+			font-weight: bold;
+			color: #99CC66;
+		}
+		a:hover {
+			color: #996600;
+		}
+		#welcomemsg {
+			margin-top: 1em;
+			vertical-align: middle;
+			text-align: center;
+			font-size: 3em;
+			color: #FFCC66;
+			width: 80%;
+			padding-left: 10%;
+		}
+		.hint {
+			display: inline-block;
+		}
+		.title {
+			background-color: #FFCC66;
+			color: #996600;
+			width: 100%;
+			text-align: center;
+			font-size: 1.1em;
+			margin-bottom: 1em;
+			font-weight: 700;	
+		}
+		.navitem {
+			font-size: .9em;
+			display: inline-block;
+			margin-right: .8em;
+		}
+		@media all and (max-width: 50em){
+            #appname { margin-left: 0px; float: none; width: 100%; text-align: center; font-size: 2em; }  
+            #nav { margin-top: 2em; float: none; display: inline-block; text-align: center; width: 100%; margin-left: 0px; margin-right: 1em; font-size: 120%; }
+            #welcomemsg { width: 92%; padding-left: 2%; font-size: 2em; }
+            .bodycontainer { padding-left: 1em; padding-right: 1em; top: 7em; }
+            label { min-width: 5em; text-align: left; overflow: visible; }	
+            .html { width: 80%; margin-bottom: 1em; }
+            input[type=text] { width: 80%; margin-bottom: 1em; }
+            form { margin-top: 1em; background-color: rgba(32,32,32, .7); padding-left: 1em; overflow: hidden; margin-left: 2%; width: 90%; font-size: 120%; }
+            textarea { width: 80%; margin-bottom: 1em; }
+            .title { margin-left: -1em; width: 105%; }
+            #appname { color: #FFCC66; }
+            .event, .org { margin-top: 1em; /*padding-left: 1em;*/ }
+        }
+	</style>{{end}}
+
+{{define "nav"}}
+<div class="navcontainer">
+	<h1 id="appname" onClick="document.location = '/';">OrgReminders</h1>
+	<div id="nav">
+	{{if .LoggedIn}}
+		<div class="navitem"><a href="/newevent">New Event</a></div>
+		<div class="navitem"><a href="/newmember">New Member</a></div>
+		{{if .AllowNewOrg}}
+			<div class="navitem"><a href="/neworg">New Org</a></div>
+		{{end}}
+		<div class="navitem"><a href="/events">Active Events</a></div>
+		<div class="navitem"><a href="/organizations">Organizations</a></div>
+		{{if .SuperUser}}
+			<div class="navitem"><a href="/cron">Run Cron</a></div>
+		{{end}}
+		<div class="navitem"><a href="/logout">Log out</a></div>
+	{{else}}
+		<div class="navitem"><a href="/login">Log in</a></div>
+	{{end}}
+	</div>
+</div>
+{{end}}
+
+{{define "nav2"}}
+<div class="navcontainer">
+	<h1 id="appname" onClick="document.location = '/';">OrgReminders</h1>
+	<div id="nav">
+	{{if .LoggedIn}}
+		New: &nbsp;
+		<div class="navitem"><a href="/neworg">Org</a></div>
+		<div class="navitem"><a href="/newevent">Event</a></div>
+		<div class="navitem"><a href="/newmember">Member</a></div>
+		| &nbsp; 
+		View: &nbsp;
+		<div class="navitem"><a href="/organizations">Orgs</a></div>
+		<div class="navitem"><a href="/events">Events</a></div>
+		<div class="navitem"><a href="/members">Members</a></div>
+		| &nbsp;
+		<div class="navitem"><a href="/logout">Log out</a></div>
+	{{else}}
+		<div class="navitem"><a href="/login">Log in</a></div>
+	{{end}}
+	</div>
+</div>
+{{end}}
+
+{{define "footer"}}
+<div class="footercontainer">
+{{if .LoggedIn}}Logged in as: {{.UserEmail}}{{end}}&nbsp;
+{{if .SuperUser}}
+	<div class="navitem" style="float: left; "><a href="/cron">Run Cron</a></div>
+{{end}}
+</div>
+{{end}}
