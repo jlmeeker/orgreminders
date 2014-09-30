@@ -57,7 +57,7 @@ type Page struct {
 	SavedMember    bool
 	Member2Edit    Member
 	Member2EditKey string
-	ScheduleHTML map[string][]string
+	ScheduleHTML   map[string][]string
 }
 
 func NewPage(u *User) (*Page, error) {
@@ -176,7 +176,7 @@ func EventSaveHandler(w http.ResponseWriter, r *http.Request) {
 	var remqtys = r.PostForm["remqty[]"]
 	var remtyps = r.PostForm["remtyp[]"]
 	for remkey, remval := range remqtys {
-		var entry = fmt.Sprintf("%s%s",remval,remtyps[remkey])
+		var entry = fmt.Sprintf("%s%s", remval, remtyps[remkey])
 		event.Reminders.Add(entry)
 	}
 

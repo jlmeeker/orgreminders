@@ -21,7 +21,7 @@ type Event struct {
 	Submitter    user.User
 	Email        bool
 	Text         bool
-	Reminders Schedule
+	Reminders    Schedule
 }
 
 func NewEvent() Event {
@@ -111,6 +111,7 @@ func (e Event) Update(c appengine.Context, key string) bool {
 func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 	// Loop through organizations for the event and send out notifications
 	for _, orgname := range e.Orgs {
+		var notify bool
 		// Lookup organization
 		o, oerr := GetOrganizationByName(c, orgname)
 		if oerr != nil {
@@ -123,17 +124,20 @@ func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 		checkTime := time.Now().In(location)
 
 		// If we are overdue, don't notify
-		if e.Due.In(location).Day() < time.Now().In(location).Day() {
+		if e.Due.In(location).Unix() < time.Now().In(location).Unix() {
 			continue
-		} 
+		}
 
-		// Cycle through event reminder times and notify (or not)
-		var notify bool
-		var times = e.Reminders.Times(e.Due.In(location))
-		for _, ttime := range times {
-			if checkTime.Truncate(time.Minute) == ttime.Truncate(time.Minute) {
-				notify = true
-				break;
+		if now {
+			notify = true
+		} else {
+			// Cycle through event reminder times and notify (or not)
+			var times = e.Reminders.Times(e.Due.In(location))
+			for _, ttime := range times {
+				if checkTime.Truncate(time.Minute) == ttime.Truncate(time.Minute) {
+					notify = true
+					break
+				}
 			}
 		}
 

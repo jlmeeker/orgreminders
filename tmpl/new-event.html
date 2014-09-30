@@ -64,6 +64,9 @@
 			<label for="sendtext" class="cblabel">Send Text</label>
 			<input type="checkbox" name="sendtext" id="sendtext"><br>
 		<br>
+			<label for="oncreate" class="cblabel">Now</label>
+			<input type="checkbox" name="oncreate" id="oncreate">
+		<br>
 			<div id="rcon" >
 				<label>Reminder</label>
 				<select name="remqty[]">
@@ -82,7 +85,7 @@
 					<option value="12">12</option>
 					<option value="13">13</option>
 					<option value="14">14</option>
-					<option value="15">15</option>
+					<option value="15" selected>15</option>
 					<option value="16">16</option>
 					<option value="17">17</option>
 					<option value="18">18</option>
@@ -93,7 +96,7 @@
 					<option value="23">23</option>
 				</select>
 				<select name="remtyp[]">
-					<option value="m">Minute(s)</option>
+					<option value="m" selected>Minute(s)</option>
 					<option value="h">Hour(s)</option>
 					<option value="d">Day(s)</option>
 					<option value="w">Week(s)</option>
