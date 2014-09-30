@@ -1,5 +1,4 @@
 cron:
-- description: daily job
+- description: hourly job
   url: /cron
-  schedule: every day 06:30
-  timezone: America/Boise
+  schedule: every 1 minute

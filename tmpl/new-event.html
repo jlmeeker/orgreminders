@@ -6,6 +6,37 @@
 	        	inline:true,
 	        	selector:'div.html',
 			});
+
+			function addreminder() {
+				var rcon = document.getElementById("rcon");
+
+				var label = document.createElement("label");
+				label.innerHTML = "Reminder";
+				rcon.appendChild(label);
+
+				var numselect = document.createElement("select");
+                numselect.name = "remqty[]";
+                for (i = 0; i < 24; i++) { 
+				    var numopt = document.createElement("option")
+				    numopt.value = numopt.text = i;
+				    numselect.appendChild(numopt);
+				} 
+                rcon.appendChild(numselect);
+
+                var types = {"m": "Minute(s)","h": "Hour(s)","d": "Day(s)","w": "Week(s)"};
+                var typeselect = document.createElement("select");
+                typeselect.name = "remtyp[]";
+                for (t in types) { 
+				    var typopt = document.createElement("option")
+				    typopt.value = t;
+				    typopt.text = types[t];
+				    typeselect.appendChild(typopt);
+				} 
+                rcon.appendChild(typeselect);
+
+                // Append a line break 
+                rcon.appendChild(document.createElement("br"));
+			}
 	</script>
 	{{template "css"}}
 </head>
@@ -33,33 +64,43 @@
 			<label for="sendtext" class="cblabel">Send Text</label>
 			<input type="checkbox" name="sendtext" id="sendtext"><br>
 		<br>
-			<label for="oncreate" class="cblabel">Now</label>
-			<input type="checkbox" name="oncreate" id="oncreate">
-		<br>
-			<label for="ondue" class="cblabel">Day Due</label>
-			<input type="checkbox" name="ondue" id="ondue" checked>
-		<br>
-			<label for="oneday" class="cblabel">1 Day Before</label>
-			<input type="checkbox" name="oneday" id="oneday">
-		<br>
-			<label for="twodays" class="cblabel">2 Days Before</label>
-			<input type="checkbox" name="twodays" id="twodays">
-		<br>
-			<label for="threedays" class="cblabel">3 Days Before</label>
-			<input type="checkbox" name="threedays" id="threedays">
-		<br>
-			<label for="fourdays" class="cblabel">4 Days Before</label>
-			<input type="checkbox" name="fourdays" id="fourdays">
-		<br>
-			<label for="fivedays" class="cblabel">5 Days Before</label>
-			<input type="checkbox" name="fivedays" id="fivedays">
-		<br>
-			<label for="sixdays" class="cblabel">6 Days Before</label>
-			<input type="checkbox" name="sixdays" id="sixdays">
-		<br>
-			<label for="sevendays" class="cblabel">7 Days Before</label>
-			<input type="checkbox" name="sevendays" id="sevendays">
-		<br>
+			<div id="rcon" >
+				<label>Reminder</label>
+				<select name="remqty[]">
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+					<option value="22">22</option>
+					<option value="23">23</option>
+				</select>
+				<select name="remtyp[]">
+					<option value="m">Minute(s)</option>
+					<option value="h">Hour(s)</option>
+					<option value="d">Day(s)</option>
+					<option value="w">Week(s)</option>
+				</select>
+				<br>
+			</div> 
+			&nbsp; &nbsp; <input type="button" value="Add Reminder" onclick="addreminder();">
 		<br>
 			<label for="orgs">Organization(s)</label>
 			<select multiple name="orgs" id="orgs">

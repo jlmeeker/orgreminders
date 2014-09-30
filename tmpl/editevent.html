@@ -6,6 +6,37 @@
 	        	inline:true,
 	        	selector:'div.html',
 			});
+
+			function addreminder() {
+				var rcon = document.getElementById("rcon");
+
+				var label = document.createElement("label");
+				label.innerHTML = "Reminder";
+				rcon.appendChild(label);
+
+				var numselect = document.createElement("select");
+                numselect.name = "remqty[]";
+                for (i = 0; i < 24; i++) { 
+				    var numopt = document.createElement("option")
+				    numopt.value = numopt.text = i;
+				    numselect.appendChild(numopt);
+				} 
+                rcon.appendChild(numselect);
+
+                var types = {"m": "Minute(s)","h": "Hour(s)","d": "Day(s)","w": "Week(s)"};
+                var typeselect = document.createElement("select");
+                typeselect.name = "remtyp[]";
+                for (t in types) { 
+				    var typopt = document.createElement("option")
+				    typopt.value = t;
+				    typopt.text = types[t];
+				    typeselect.appendChild(typopt);
+				} 
+                rcon.appendChild(typeselect);
+
+                // Append a line break 
+                rcon.appendChild(document.createElement("br"));
+			}
 	</script>
 	{{template "css"}}
 </head>
@@ -15,6 +46,7 @@
 	<form action="/saveevent" method="POST" style="border: 1px black;">
 	<div class="title">Edit Event</div>
 		<input type="hidden" id="key" name="key" value="{{.Event2EditKey}}">
+		{{$sched := .ScheduleHTML}}
 		{{$porgs := .Orgs}}
 		{{with .Event2Edit}}
 				<label for="title">Title</label>
@@ -40,31 +72,47 @@
 				<label for="oncreate" class="cblabel">Now</label>
 				<input type="checkbox" name="oncreate" id="oncreate">
 			<br>
-				<label for="ondue">Day Due</label>
-				<input type="checkbox" name="ondue" id="ondue" {{if .OnDue}} checked {{end}}>
+				<div id="rcon" >
+				{{range $typ, $offs := $sched}}
+				{{$offset := index $offs 0}}
+				{{$unit := index $offs 1}}
+				<label>Reminder</label>
+				<select name="remqty[]">
+					<option value="0" {{if eq $offset "0"}}selected{{end}}>0</option>
+					<option value="1" {{if eq $offset "1"}}selected{{end}}>1</option>
+					<option value="2" {{if eq $offset "2"}}selected{{end}}>2</option>
+					<option value="3" {{if eq $offset "3"}}selected{{end}}>3</option>
+					<option value="4" {{if eq $offset "4"}}selected{{end}}>4</option>
+					<option value="5" {{if eq $offset "5"}}selected{{end}}>5</option>
+					<option value="6" {{if eq $offset "6"}}selected{{end}}>6</option>
+					<option value="7" {{if eq $offset "7"}}selected{{end}}>7</option>
+					<option value="8" {{if eq $offset "8"}}selected{{end}}>8</option>
+					<option value="9" {{if eq $offset "9"}}selected{{end}}>9</option>
+					<option value="10" {{if eq $offset "10"}}selected{{end}}>10</option>
+					<option value="11" {{if eq $offset "11"}}selected{{end}}>11</option>
+					<option value="12" {{if eq $offset "12"}}selected{{end}}>12</option>
+					<option value="13" {{if eq $offset "13"}}selected{{end}}>13</option>
+					<option value="14" {{if eq $offset "14"}}selected{{end}}>14</option>
+					<option value="15" {{if eq $offset "15"}}selected{{end}}>15</option>
+					<option value="16" {{if eq $offset "16"}}selected{{end}}>16</option>
+					<option value="17" {{if eq $offset "17"}}selected{{end}}>17</option>
+					<option value="18" {{if eq $offset "18"}}selected{{end}}>18</option>
+					<option value="19" {{if eq $offset "19"}}selected{{end}}>19</option>
+					<option value="20" {{if eq $offset "20"}}selected{{end}}>20</option>
+					<option value="21" {{if eq $offset "21"}}selected{{end}}>21</option>
+					<option value="22" {{if eq $offset "22"}}selected{{end}}>22</option>
+					<option value="23" {{if eq $offset "23"}}selected{{end}}>23</option>
+				</select>
+				<select name="remtyp[]">
+					<option value="m" {{if eq $unit "m"}}selected{{end}}>Minute(s)</option>
+					<option value="h" {{if eq $unit "h"}}selected{{end}}>Hour(s)</option>
+					<option value="d" {{if eq $unit "d"}}selected{{end}}>Day(s)</option>
+					<option value="w" {{if eq $unit "w"}}selected{{end}}>Week(s)</option>
+				</select>
 			<br>
-				<label for="oneday">1 Day Before</label>
-				<input type="checkbox" name="oneday" id="oneday" {{if .OneDay}} checked {{end}}>
-			<br>
-				<label for="twodays">2 Days Before</label>
-				<input type="checkbox" name="twodays" id="twodays" {{if .TwoDay}} checked {{end}}>
-			<br>
-				<label for="threedays">3 Days Before</label>
-				<input type="checkbox" name="threedays" id="threedays" {{if .ThreeDay}} checked {{end}}>
-			<br>
-				<label for="fourdays">4 Days Before</label>
-				<input type="checkbox" name="fourdays" id="fourdays" {{if .FourDay}} checked {{end}}>
-			<br>
-				<label for="fivedays">5 Days Before</label>
-				<input type="checkbox" name="fivedays" id="fivedays" {{if .FiveDay}} checked {{end}}>
-			<br>
-				<label for="sixdays">6 Days Before</label>
-				<input type="checkbox" name="sixdays" id="sixdays" {{if .SixDay}} checked {{end}}>
-			<br>
-				<label for="sevendays">7 Days Before</label>
-				<input type="checkbox" name="sevendays" id="sevendays" {{if .SevenDay}} checked {{end}}>
-			<br>
-			<br>
+				{{end}}
+				</div>
+				&nbsp; &nbsp; <input type="button" value="Add Reminder" onclick="addreminder();"><br>
 				<label for="orgs">Organization(s)</label>
 				<select multiple name="orgs" id="orgs">
 				{{range .Orgs}}

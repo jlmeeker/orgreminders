@@ -1,5 +1,5 @@
 application: orgreminders
-version: 3c
+version: 4
 runtime: go
 api_version: go1
 instance_class: F1

@@ -57,6 +57,7 @@ type Page struct {
 	SavedMember    bool
 	Member2Edit    Member
 	Member2EditKey string
+	ScheduleHTML map[string][]string
 }
 
 func NewPage(u *User) (*Page, error) {
@@ -171,36 +172,12 @@ func EventSaveHandler(w http.ResponseWriter, r *http.Request) {
 		event.Text = true
 	}
 
-	if r.PostFormValue("ondue") == "on" {
-		event.OnDue = true
-	}
-
-	if r.PostFormValue("oneday") == "on" {
-		event.OneDay = true
-	}
-
-	if r.PostFormValue("twodays") == "on" {
-		event.TwoDay = true
-	}
-
-	if r.PostFormValue("threedays") == "on" {
-		event.ThreeDay = true
-	}
-
-	if r.PostFormValue("fourdays") == "on" {
-		event.FourDay = true
-	}
-
-	if r.PostFormValue("fivedays") == "on" {
-		event.FiveDay = true
-	}
-
-	if r.PostFormValue("sixdays") == "on" {
-		event.SixDay = true
-	}
-
-	if r.PostFormValue("sevendays") == "on" {
-		event.SevenDay = true
+	// save reminder schedule
+	var remqtys = r.PostForm["remqty[]"]
+	var remtyps = r.PostForm["remtyp[]"]
+	for remkey, remval := range remqtys {
+		var entry = fmt.Sprintf("%s%s",remval,remtyps[remkey])
+		event.Reminders.Add(entry)
 	}
 
 	o, err := GetOrganizationByName(c, event.Orgs[0])
@@ -241,6 +218,7 @@ func EventSaveHandler(w http.ResponseWriter, r *http.Request) {
 	p.Event2Edit = event
 	p.Event2EditKey = key
 	p.SavedEvent = true
+
 	renderTemplate(w, "save", p)
 }
 
@@ -272,6 +250,9 @@ func EventEditHandler(w http.ResponseWriter, r *http.Request) {
 				p.Orgs = append(p.Orgs, uorg.Name)
 			}
 		}
+
+		// Extract usable event reminder list
+		p.ScheduleHTML = p.Event2Edit.Reminders.HTML()
 
 		sort.Strings(p.Orgs)
 		renderTemplate(w, "editevent", p)
@@ -495,7 +476,7 @@ func SendOrgMessage(c appengine.Context, o Organization, e Event, t string) (res
 	var senderUserName = strings.Replace(o.Name, " ", "_", -1)
 	var sender = fmt.Sprintf("%s Reminders <%s@%s.appspotmail.com", o.Name, senderUserName, appid)
 	members := o.GetMembers(c)
-	recipients := make([]string, len(members))
+	recipients := []string{}
 
 	for _, m := range members {
 		if t == "email" && m.EmailOn {
@@ -503,6 +484,12 @@ func SendOrgMessage(c appengine.Context, o Organization, e Event, t string) (res
 		} else if t == "text" && m.TextOn {
 			recipients = append(recipients, m.TextAddr)
 		}
+	}
+
+	if len(recipients) == 0 {
+		c.Infof("No recipients, not sending reminder (" + t + ")")
+		result = true
+		return
 	}
 
 	msg := &mail.Message{
@@ -514,7 +501,6 @@ func SendOrgMessage(c appengine.Context, o Organization, e Event, t string) (res
 	}
 
 	c.Infof("notify (%s): %v", e.Title, recipients)
-
 	if err := mail.Send(c, msg); err != nil {
 		c.Errorf("Couldn't send email: %v", err)
 	} else {

@@ -21,14 +21,7 @@ type Event struct {
 	Submitter    user.User
 	Email        bool
 	Text         bool
-	OnDue        bool
-	OneDay       bool
-	TwoDay       bool
-	ThreeDay     bool
-	FourDay      bool
-	FiveDay      bool
-	SixDay       bool
-	SevenDay     bool
+	Reminders Schedule
 }
 
 func NewEvent() Event {
@@ -127,46 +120,20 @@ func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 
 		// Analyze the active event and see if we need to send out a notification
 		location, _ := time.LoadLocation(o.TimeZone)
-		todayDay := time.Now().In(location).Day()
-		var notify bool
+		checkTime := time.Now().In(location)
 
 		// If we are overdue, don't notify
 		if e.Due.In(location).Day() < time.Now().In(location).Day() {
 			continue
-		} else {
-			c.Infof("event is not past")
-		}
+		} 
 
-		// Slice of our timestamps
-		var times = make(map[string]int)
-		times["OnDue"] = e.Due.In(location).Day()                      // Due Date
-		times["OneDay"] = e.Due.In(location).AddDate(0, 0, -1).Day()   // 1 day before due
-		times["TwoDay"] = e.Due.In(location).AddDate(0, 0, -2).Day()   // 2 days before due
-		times["ThreeDay"] = e.Due.In(location).AddDate(0, 0, -3).Day() // 3 days before due
-		times["FourDay"] = e.Due.In(location).AddDate(0, 0, -4).Day()  // 4 days before due
-		times["FiveDay"] = e.Due.In(location).AddDate(0, 0, -5).Day()  // 5 days before due
-		times["SixDay"] = e.Due.In(location).AddDate(0, 0, -6).Day()   // 6 days before due
-		times["SevenDay"] = e.Due.In(location).AddDate(0, 0, -7).Day() // 7 days before due
-
-		for tk, ttime := range times {
-			if now {
+		// Cycle through event reminder times and notify (or not)
+		var notify bool
+		var times = e.Reminders.Times(e.Due.In(location))
+		for _, ttime := range times {
+			if checkTime.Truncate(time.Minute) == ttime.Truncate(time.Minute) {
 				notify = true
-			} else if tk == "OnDue" && e.OnDue && ttime == todayDay {
-				notify = true
-			} else if tk == "OneDay" && e.OneDay && ttime == todayDay {
-				notify = true
-			} else if tk == "TwoDay" && e.TwoDay && ttime == todayDay {
-				notify = true
-			} else if tk == "ThreeDay" && e.ThreeDay && ttime == todayDay {
-				notify = true
-			} else if tk == "FourDay" && e.FourDay && ttime == todayDay {
-				notify = true
-			} else if tk == "FiveDay" && e.FiveDay && ttime == todayDay {
-				notify = true
-			} else if tk == "SixDay" && e.SixDay && ttime == todayDay {
-				notify = true
-			} else if tk == "SevenDay" && e.SevenDay && ttime == todayDay {
-				notify = true
+				break;
 			}
 		}
 
