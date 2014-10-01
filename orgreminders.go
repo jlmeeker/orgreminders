@@ -492,6 +492,9 @@ func SendOrgMessage(c appengine.Context, o Organization, e Event, t string) (res
 		return
 	}
 
+	// get rid of duplicate recipients
+	recipients = removeDuplicates(recipients)
+
 	msg := &mail.Message{
 		Sender:   sender,
 		Bcc:      recipients,
@@ -530,3 +533,17 @@ func CronHandler(w http.ResponseWriter, r *http.Request) {
 
 	renderTemplate(w, "cron", p)
 }
+
+// from: https://groups.google.com/d/msg/golang-nuts/-pqkICuokio/KqJ0091EzVcJ
+func removeDuplicates(a []string) []string {
+	result := []string{}
+	seen := map[string]string{}
+	for _, val := range a {
+		if _, ok := seen[val]; !ok {
+			result = append(result, val)
+			seen[val] = val
+		}
+	}
+	return result
+}
+
