@@ -37,7 +37,7 @@ func GetAllEvents(c appengine.Context, active bool) map[string]Event {
 	utcLoc, _ := time.LoadLocation("UTC")
 	var today = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, utcLoc)
 	mapResults := make(map[string]Event)
-	q := datastore.NewQuery("Event")
+	q := datastore.NewQuery("Event").Project("Orgs", "Due", "Title", "Email", "Text", "Reminders", "EmailMessage", "TextMessage")
 
 	if active {
 		q = q.Filter("Due >= ", today)
