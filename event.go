@@ -10,6 +10,7 @@ import (
 )
 
 type Event struct {
+	Key          string `datastore:"-"`
 	Orgs         []string
 	Created      time.Time
 	Saved        time.Time
@@ -37,7 +38,7 @@ func GetAllEvents(c appengine.Context, active bool) map[string]Event {
 	utcLoc, _ := time.LoadLocation("UTC")
 	var today = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, utcLoc)
 	mapResults := make(map[string]Event)
-	q := datastore.NewQuery("Event").Project("Orgs", "Due", "Title", "Email", "Text", "Reminders", "EmailMessage", "TextMessage")
+	q := datastore.NewQuery("Event").Project("Orgs", "Due", "Email", "Text", "Title")
 
 	if active {
 		q = q.Filter("Due >= ", today)
@@ -49,7 +50,8 @@ func GetAllEvents(c appengine.Context, active bool) map[string]Event {
 	}
 
 	for indx, event := range dbResults {
-		mapResults[keys[indx].Encode()] = event
+		event.Key = keys[indx].Encode()
+		mapResults[event.Key] = event
 	}
 
 	return mapResults
@@ -144,11 +146,16 @@ func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 		// Trigger notification
 		if notify {
 			c.Infof("Event notification triggered")
+			okay, fullevent := GetEventByKey(c, e.Key)
+			if okay != true {
+				c.Infof("Event.Notify: Error querying for event %s", e.Key)
+				return false
+			}
 			if e.Email {
-				sent = SendOrgMessage(c, o, e, "email")
+				sent = SendOrgMessage(c, o, fullevent, "email")
 			}
 			if e.Text {
-				sent = SendOrgMessage(c, o, e, "text")
+				sent = SendOrgMessage(c, o, fullevent, "text")
 			}
 		}
 	}

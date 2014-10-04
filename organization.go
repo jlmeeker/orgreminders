@@ -141,7 +141,7 @@ func (o Organization) GetEvents(c appengine.Context, active bool) map[string]Eve
 	// Attempt a DB retrieve
 	var dbResults []Event
 	mapResults := make(map[string]Event)
-	q := datastore.NewQuery("Event").Filter("Orgs = ", o.Name)
+	q := datastore.NewQuery("Event").Project("Orgs", "Due", "Email", "Text", "Title","EmailMessage","TextMessage")
 	utcLoc, _ := time.LoadLocation("UTC")
 	var today = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, utcLoc)
 
@@ -155,7 +155,12 @@ func (o Organization) GetEvents(c appengine.Context, active bool) map[string]Eve
 	}
 
 	for indx, event := range dbResults {
-		mapResults[keys[indx].Encode()] = event
+		for _, eorg := range event.Orgs {
+			if eorg == o.Name {
+				mapResults[keys[indx].Encode()] = event
+				break;
+			}
+		}
 	}
 
 	return mapResults
