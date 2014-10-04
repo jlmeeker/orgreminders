@@ -29,6 +29,14 @@ indexes:
 
 - kind: Event
   properties:
+  - name: Due
+  - name: Email
+  - name: Orgs
+  - name: Text
+  - name: Title
+
+- kind: Event
+  properties:
   - name: Orgs
   - name: Due
 
