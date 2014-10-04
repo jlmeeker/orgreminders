@@ -8,10 +8,9 @@
 	<form>
 		<div class="title">Item Saved:</div>
 		{{if .SavedEvent}}
-			{{$key := .Event2EditKey}}
 			{{with .Event2Edit}}
 			<div class="event">
-				<label>Title: </label><a href="/editevent?id={{$key}}">{{.Title}}</a>
+				<label>Title: </label><a href="/editevent?id={{.Key}}">{{.Title}}</a>
 				<br>
 				<label>Due: </label>{{.DueFormatted}}
 				<br>

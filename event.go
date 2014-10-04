@@ -63,7 +63,7 @@ func GetEventByKey(c appengine.Context, key string) (bool, Event) {
 
 	keyObj, decerr := datastore.DecodeKey(key)
 	if decerr != nil {
-		c.Infof("Invalid event key specified")
+		c.Infof("Invalid event key specified: %s", key)
 		return okay, *result
 	}
 
@@ -75,6 +75,7 @@ func GetEventByKey(c appengine.Context, key string) (bool, Event) {
 		okay = true
 	}
 
+	result.Key = key
 	return okay, *result
 }
 
@@ -92,10 +93,10 @@ func (e Event) Save(c appengine.Context) (bool, string) {
 	return result, keyNew.Encode()
 }
 
-func (e Event) Update(c appengine.Context, key string) bool {
+func (e Event) Update(c appengine.Context) bool {
 	var result bool
 
-	keyObj, decerr := datastore.DecodeKey(key)
+	keyObj, decerr := datastore.DecodeKey(e.Key)
 	if decerr != nil {
 		c.Infof("Invalid key specified")
 		return result
@@ -112,7 +113,9 @@ func (e Event) Update(c appengine.Context, key string) bool {
 
 func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 	// Loop through organizations for the event and send out notifications
+	//c.Infof("# orgs for event: %v", len(e.Orgs))
 	for _, orgname := range e.Orgs {
+		//c.Infof("event org: %s", orgname)
 		var notify bool
 		// Lookup organization
 		o, oerr := GetOrganizationByName(c, orgname)
@@ -127,16 +130,30 @@ func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 
 		// If we are overdue, don't notify
 		if e.Due.In(location).Unix() < time.Now().In(location).Unix() {
+			c.Infof("event is past due: %v", e.Due.In(location))
 			continue
+		}
+
+		// Get full Event data
+		okay, fullevent := GetEventByKey(c, e.Key)
+		if okay != true {
+			c.Infof("Event.Notify: Error querying for event %s", e.Key)
+			return false
 		}
 
 		if now {
 			notify = true
 		} else {
 			// Cycle through event reminder times and notify (or not)
-			var times = e.Reminders.Times(e.Due.In(location))
+			var times = fullevent.Reminders.Times(fullevent.Due.In(location))
+			//c.Infof("event times: %v", times)
+			//c.Infof("event sched: %v", fullevent.Reminders)
 			for _, ttime := range times {
-				if checkTime.Truncate(time.Minute) == ttime.Truncate(time.Minute) {
+				var curminute = checkTime.Truncate(time.Minute)
+				var eventminute = ttime.Truncate(time.Minute)
+				//c.Infof("cur minute: %v", curminute)
+				//c.Infof("event minute: %v", eventminute)
+				if curminute == eventminute {
 					notify = true
 					break
 				}
@@ -146,11 +163,6 @@ func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 		// Trigger notification
 		if notify {
 			c.Infof("Event notification triggered")
-			okay, fullevent := GetEventByKey(c, e.Key)
-			if okay != true {
-				c.Infof("Event.Notify: Error querying for event %s", e.Key)
-				return false
-			}
 			if e.Email {
 				sent = SendOrgMessage(c, o, fullevent, "email")
 			}
@@ -163,9 +175,9 @@ func (e Event) Notify(c appengine.Context, now bool) (sent bool) {
 	return
 }
 
-func (e Event) GetHTMLView(c appengine.Context, key string) string {
+func (e Event) GetHTMLView(c appengine.Context) string {
 	buffer := new(bytes.Buffer)
-	var tmpltxt = `<label>Event Title: </label><a href="https://orgreminders.appspot.com/editevent?id=` + key + `">{{.Title}}</a>
+	var tmpltxt = `<label>Event Title: </label><a href="https://orgreminders.appspot.com/editevent?id={{.Key}}">{{.Title}}</a>
 	<br>
 	<label>When Due: </label>{{.DueFormatted}}
 	<br>

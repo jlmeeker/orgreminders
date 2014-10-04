@@ -45,10 +45,10 @@
 <div class="bodycontainer">
 	<form action="/saveevent" method="POST" style="border: 1px black;">
 	<div class="title">Edit Event</div>
-		<input type="hidden" id="key" name="key" value="{{.Event2EditKey}}">
 		{{$sched := .ScheduleHTML}}
 		{{$porgs := .Orgs}}
 		{{with .Event2Edit}}
+			<input type="hidden" id="key" name="key" value="{{.Key}}">
 				<label for="title">Title</label>
 				<input type="text" id="title" name="title" value="{{.Title}}">
 			<br>

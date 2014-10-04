@@ -12,13 +12,6 @@ indexes:
 
 - kind: Event
   properties:
-  - name: Active
-  - name: Orgs
-  - name: Due
-    direction: desc
-
-- kind: Event
-  properties:
   - name: Due
   - name: Email
   - name: EmailMessage
@@ -35,18 +28,7 @@ indexes:
   - name: Text
   - name: Title
 
-- kind: Event
-  properties:
-  - name: Orgs
-  - name: Due
-
 - kind: Member
   properties:
   - name: Orgs
   - name: Name
-
-- kind: Member
-  properties:
-  - name: Orgs
-  - name: Name
-    direction: desc

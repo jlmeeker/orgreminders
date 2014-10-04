@@ -41,7 +41,6 @@ type Page struct {
 	Events         map[string]Event
 	Keys           []*datastore.Key
 	Event2Edit     Event
-	Event2EditKey  string
 	Organizations  map[string]Organization
 	Org2Edit       Organization
 	Org2EditKey    string
@@ -199,12 +198,12 @@ func EventSaveHandler(w http.ResponseWriter, r *http.Request) {
 
 	event.Due = t
 
-	key := r.PostFormValue("key")
+	event.Key = r.PostFormValue("key")
 	var subject = "Event Saved: "
-	if key == "" {
-		_, key = event.Save(c)
+	if event.Key == "" {
+		_, event.Key = event.Save(c)
 	} else {
-		event.Update(c, key)
+		event.Update(c)
 		subject = "Event Updated: "
 	}
 
@@ -213,10 +212,9 @@ func EventSaveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	event.DueFormatted = event.Due.In(location).Format("01/02/2006 3:04pm")
-	AdminNotify(c, u.Meta.Email, subject+event.Title, "The following event was just saved: <br><br>"+event.GetHTMLView(c, key))
+	AdminNotify(c, u.Meta.Email, subject+event.Title, "The following event was just saved: <br><br>"+event.GetHTMLView(c))
 
 	p.Event2Edit = event
-	p.Event2EditKey = key
 	p.SavedEvent = true
 
 	renderTemplate(w, "save", p)
@@ -228,8 +226,7 @@ func EventEditHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var ok bool
 
-	p.Event2EditKey = r.FormValue("id")
-	ok, p.Event2Edit = GetEventByKey(c, p.Event2EditKey)
+	ok, p.Event2Edit = GetEventByKey(c, r.FormValue("id"))
 
 	if ok {
 		org, _ := GetOrganizationByName(c, p.Event2Edit.Orgs[0])
@@ -520,7 +517,9 @@ func CronHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	events := GetAllEvents(c, true) // active only
+	//c.Infof("# events to check for cron: %v", len(events))
 	for key, event := range events {
+		//c.Infof("checking event: %s", event.Title)
 		res := event.Notify(c, false)
 		if res {
 			org, _ := GetOrganizationByName(c, event.Orgs[0])
